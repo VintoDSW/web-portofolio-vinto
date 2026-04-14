@@ -1,9 +1,11 @@
 "use client";
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function BlogDetail() {
   const [lang, setLang] = useState('id'); // Default ID sesuai request konten
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -132,27 +134,70 @@ export default function BlogDetail() {
         <nav className="flex items-center justify-between px-6 py-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 shadow-2xl relative">
           
           <div className="flex items-center gap-2 font-bold text-xl text-white italic relative z-10 w-1/4">
-            <a href="/"><span>Vinto<span className="text-green-500">.</span></span></a>
+            <Link href="/"><span>Vinto<span className="text-green-500">.</span></span></Link>
           </div>
 
           <div className="hidden lg:flex gap-8 text-sm font-medium text-gray-300 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-max">
-            <a href="/" className="hover:text-green-400 transition-colors">{t.nav[0]}</a>
-            <a href="/#about" className="hover:text-green-400 transition-colors">{t.nav[1]}</a>
-            <a href="#" className="hover:text-green-400 transition-colors">{t.nav[2]}</a>
-            <a href="#" className="hover:text-green-400 transition-colors">{t.nav[3]}</a>
-            <a href="#" className="hover:text-green-400 transition-colors">{t.nav[4]}</a>
-            <a href="/blog" className="text-green-400 font-bold transition-colors">{t.nav[5]}</a>
+            <Link href="/" className="hover:text-green-400 transition-colors">{t.nav[0]}</Link>
+            <Link href="/#about" className="hover:text-green-400 transition-colors">{t.nav[1]}</Link>
+            <Link href="#" className="hover:text-green-400 transition-colors">{t.nav[2]}</Link>
+            <Link href="#" className="hover:text-green-400 transition-colors">{t.nav[3]}</Link>
+            <Link href="#" className="hover:text-green-400 transition-colors">{t.nav[4]}</Link>
+            <Link href="/blog" className="text-green-400 font-bold transition-colors">{t.nav[5]}</Link>
           </div>
 
           <div className="flex items-center justify-end gap-4 relative z-10 w-1/4">
-            <div className="hidden md:flex bg-white/5 rounded-full p-1 border border-white/10 backdrop-blur-sm">
+            
+            {/* Hamburger Button (Mobile Only) */}
+            <button 
+              className="lg:hidden text-gray-300 hover:text-white p-1 transition-colors"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {isMobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+
+            {/* Desktop Language & Button */}
+            <div className="hidden lg:flex bg-white/5 rounded-full p-1 border border-white/10 backdrop-blur-sm">
               <button onClick={() => setLang('en')} className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all ${lang === 'en' ? 'bg-green-600 text-white shadow-md' : 'text-gray-400 hover:text-white'}`}>EN</button>
               <button onClick={() => setLang('id')} className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all ${lang === 'id' ? 'bg-green-600 text-white shadow-md' : 'text-gray-400 hover:text-white'}`}>ID</button>
             </div>
-            <button className="hidden md:block px-6 py-2.5 bg-green-600 hover:bg-green-500 text-white text-sm font-medium rounded-full shadow-[0_0_15px_rgba(22,163,74,0.5)] transition-all whitespace-nowrap">
+            <button className="hidden lg:block px-6 py-2.5 bg-green-600 hover:bg-green-500 text-white text-sm font-medium rounded-full shadow-[0_0_15px_rgba(22,163,74,0.5)] transition-all whitespace-nowrap">
               {t.btnTouch}
             </button>
           </div>
+
+          {/* MOBILE DROPDOWN MENU */}
+          {isMobileMenuOpen && (
+            <div className="absolute top-[110%] left-0 right-0 p-6 bg-[#0b120c]/95 backdrop-blur-2xl border border-white/10 rounded-2xl flex flex-col gap-6 lg:hidden z-50 shadow-2xl">
+              <div className="flex flex-col gap-4 text-sm font-medium text-gray-300">
+                <Link href="/" className="hover:text-green-400 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.nav[0]}</Link>
+                <Link href="/#about" className="hover:text-green-400 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.nav[1]}</Link>
+                <Link href="#" className="hover:text-green-400 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.nav[2]}</Link>
+                <Link href="#" className="hover:text-green-400 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.nav[3]}</Link>
+                <Link href="#" className="hover:text-green-400 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.nav[4]}</Link>
+                <Link href="/blog" className="text-green-400 font-bold transition-colors" onClick={() => setIsMobileMenuOpen(false)}>{t.nav[5]}</Link>
+              </div>
+              
+              <hr className="border-white/10" />
+
+              <div className="flex flex-col gap-4">
+                <div className="flex bg-white/5 rounded-full p-1 border border-white/10 backdrop-blur-sm w-full">
+                  <button onClick={() => setLang('en')} className={`flex-1 py-2 text-xs font-bold rounded-full transition-all ${lang === 'en' ? 'bg-green-600 text-white shadow-md' : 'text-gray-400 hover:text-white'}`}>EN</button>
+                  <button onClick={() => setLang('id')} className={`flex-1 py-2 text-xs font-bold rounded-full transition-all ${lang === 'id' ? 'bg-green-600 text-white shadow-md' : 'text-gray-400 hover:text-white'}`}>ID</button>
+                </div>
+                <button className="w-full px-6 py-3 bg-green-600 hover:bg-green-500 text-white text-sm font-medium rounded-full shadow-[0_0_15px_rgba(22,163,74,0.5)] transition-all">
+                  {t.btnTouch}
+                </button>
+              </div>
+            </div>
+          )}
+
         </nav>
       </div>
 
@@ -160,9 +205,9 @@ export default function BlogDetail() {
       <article className="relative z-30 max-w-4xl mx-auto px-6 md:px-12 pt-16 pb-10">
         
         {/* Back Button */}
-        <a href="/blog" className="inline-flex items-center text-green-500 hover:text-green-400 text-sm font-medium transition-colors mb-8">
+        <Link href="/blog" className="inline-flex items-center text-green-500 hover:text-green-400 text-sm font-medium transition-colors mb-8">
           {t.backBtn}
-        </a>
+        </Link>
 
         {/* Hero Image Article */}
         <div className="relative w-full h-[300px] md:h-[450px] rounded-3xl overflow-hidden mb-10 shadow-2xl border border-white/10">
@@ -191,9 +236,12 @@ export default function BlogDetail() {
                 alt={post.authorName} 
                 className="w-12 h-12 rounded-full border-2 border-white/20 object-cover" 
               />
-              <span className="text-base font-semibold text-white">
-                {post.authorName}
-              </span>
+              <div className="flex flex-col">
+                <span className="text-base font-semibold text-white">
+                  {post.authorName}
+                </span>
+                <span className="text-xs text-gray-400">Content Writer</span>
+              </div>
             </div>
             {/* Date & Time */}
             <div className="flex items-center gap-2 text-sm font-medium text-gray-400">
